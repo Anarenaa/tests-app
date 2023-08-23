@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>App for creating tests</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="create-block">
+        <a href="create-page.html" class="create-block__btn">Create new</a>
+    </div>
+    <div class="ready-made-tests">
+    </div>
+
+    <script>
+        const previewTest = JSON.parse(localStorage.getItem('previewTest')) || [];
+
+        if (previewTest.length >= 1) {
+            renderTestList();
+        } else {
+            document.querySelector('.ready-made-tests').style.display = 'none';
+        }
+
+        function renderTestList() {
+            const container = document.querySelector('.ready-made-tests');
+            container.innerHTML = '';
+
+            let previewTestHTML = '';
+
+            previewTest.forEach((test, index) => {
+                const { title, description } = test;
+                const html = `
+                <div class="ready-made-test">
+                    <h2 class="ready-made-test__title">
+                        <a href="check-test.html">
+                        ${title}
+                        </a>
+                    </h2>
+                    <div class="ready-made-test__description">
+                        ${description}
+                    </div>
+                    <img class="ready-made-test__remove-button" src="img/icons-trash.svg" alt="remove-icon" onclick = "
+                        previewTest.splice(${index}, 1);
+                        renderTestList();
+                        localStorage.setItem('previewTest', JSON.stringify(previewTest));
+                    ">
+                </div>`;
+                previewTestHTML += html;
+            });
+
+            container.innerHTML = previewTestHTML;
+
+        }
+    </script>
+
+</body>
+
+</html>

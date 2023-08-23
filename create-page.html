@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test creation</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="form">
+        <input type="text" class="form__title" placeholder="Add title" autocomplete="off" autofocus>
+        <textarea class="form__description" placeholder="Add description"></textarea>
+
+        <hr>
+
+        <div class="form-blocks">
+            <div class="form-block">
+
+                <div class="form-block__inner">
+                    <label class="form-block__label">
+                        Question
+                        <input class="form-block__field" type="text" placeholder="New question">
+                    </label>
+                    <label class="form-block__label">
+                        Answer
+                        <input class="form-block__field" type="text" placeholder="New answer">
+                    </label>
+                </div>
+                <hr>
+            </div>
+        </div>
+
+        <button class="form__add-button default-button" onclick="addBlock()">&plus;</button>
+
+        <button type="submit" class="form__save-button default-button"
+            onclick="validation()">Save</button>
+    </div>
+
+    <script>
+
+        let titleElement = document.querySelector('.form__title');
+        let descriptionElement = document.querySelector('.form__description');
+
+        let formBlocks = document.querySelectorAll('.form-block__inner');
+
+        let formBlocksContainer = document.querySelector('.form-blocks');
+
+        function validation() {
+            titleElement.classList.remove('title-error');
+
+            let isValid = true;
+
+            if (titleElement.value === '') {
+                titleElement.classList.add('title-error');
+                isValid = false;
+            }
+
+            formBlocks.forEach(block => {
+                const questionInput = block.querySelector('.form-block__field[placeholder="New question"]');
+                const answerInput = block.querySelector('.form-block__field[placeholder="New answer"]');
+
+                questionInput.classList.remove('field-error');
+                answerInput.classList.remove('field-error');
+
+                if (questionInput.value === '') {
+                    questionInput.classList.add('field-error');
+                    isValid = false;
+                }
+                if (answerInput.value === '') {
+                    answerInput.classList.add('field-error');
+                    isValid = false;
+                }
+            });
+
+            if (isValid) {
+                saveTest();
+                location.href = 'index.html';
+            }
+        }
+
+        function saveTest() {
+            const title = titleElement.value;
+            const description = descriptionElement.value;
+
+            const previewTest = JSON.parse(localStorage.getItem('previewTest')) || [];
+
+            const prevIndex = previewTest.length;
+
+            const previewObject = {
+                title,
+                description,
+            };
+
+            previewTest[prevIndex] = previewObject;
+
+            localStorage.setItem('previewTest', JSON.stringify(previewTest));
+
+            answerAndQuestionsList();
+        }
+
+        function addBlock() {
+
+            const newBlock = document.createElement('div');
+            newBlock.classList.add('form-block');
+
+            newBlock.innerHTML = `
+                <div class="form-block">
+                    <button class="form-block__remove-button default-button" onclick="removeBlock(this)">&times;</button>
+                    <div class="form-block__inner">
+                        <label class="form-block__label">
+                            Question
+                            <input class="form-block__field" type="text" placeholder="New question">
+                        </label>
+                        <label class="form-block__label">
+                            Answer
+                            <input class="form-block__field" type="text" placeholder="New answer">
+                        </label>
+                    </div>
+                    <hr>
+                </div>`;
+
+            formBlocksContainer.appendChild(newBlock);
+        }
+
+        function removeBlock(button) {
+            const blockToRemove = button.closest('.form-block');
+            blockToRemove.parentNode.removeChild(blockToRemove);
+        }
+
+        function answerAndQuestionsList() {
+
+            const answerAndQuestionsList = [];
+
+            formBlocks.forEach(block => {
+                const questionInput = block.querySelector('.form-block__field[placeholder="New question"]');
+                const answerInput = block.querySelector('.form-block__field[placeholder="New answer"]');
+                const question = questionInput.value;
+                const answer = answerInput.value;
+
+                if (question && answer) {
+                    answerAndQuestionsList.push({ question, answer });
+                }
+            });
+
+            localStorage.setItem('answerAndQuestionsList', JSON.stringify(answerAndQuestionsList));
+        }
+    </script>
+</body>
+
+</html>
