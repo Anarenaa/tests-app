@@ -63,14 +63,12 @@ body {
 .ready-made-tests {
     display: -ms-grid;
     display: grid;
-    row-gap: 40px;
     -ms-grid-columns: 25% 25% 25% 25%;
     grid-template-columns: 25% 25% 25% 25%;
     background-color: #fff;
     border-radius: 15px;
     -webkit-box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-    padding: 50px 0;
     margin-bottom: 20px;
 }
 .ready-made-test {
@@ -82,13 +80,16 @@ body {
         -ms-flex-direction: column;
             flex-direction: column;
     word-wrap: break-word;
-    margin: 0 20px;
+    margin: 0 20px 50px;
     padding: 20px;
     background-color: hsl(208, 82%, 22%);
     color: #fff;
     border-radius: 10px;
     -webkit-box-shadow: 0 7px 14px rgba(0, 0, 0, 0.3);
             box-shadow: 0 7px 14px rgba(0, 0, 0, 0.3);
+}
+.ready-made-test:nth-child(-n+4){
+    margin-top: 50px;
 }
 .ready-made-test:hover {
     -webkit-transform: scale(1.1);
@@ -385,4 +386,7 @@ body {
     height: 32px;
     width: 32px;
     margin: 25px;
+}
+.empty {
+    display: none;
 }
